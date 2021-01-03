@@ -1,0 +1,11 @@
+{
+  "targets": {
+    "wiplyfirebase": {
+      "hosting": {
+        "wiply-app": [
+          "wiplyfirebase"
+        ]
+      }
+    }
+  }
+}

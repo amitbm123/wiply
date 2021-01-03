@@ -1,0 +1,19 @@
+{
+  "hosting": [
+    {
+      "target": "wiply-app",
+      "public": "dist/wiply-app",
+      "ignore": [
+        "firebase.json",
+        "**/.*",
+        "**/node_modules/**"
+      ],
+      "rewrites": [
+        {
+          "source": "**",
+          "destination": "/index.html"
+        }
+      ]
+    }
+  ]
+}
