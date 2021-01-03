@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import {TileComponent} from '../tile/tile.component';
+import { AngularFireDatabase } from '@angular/fire/database';
+import {BehaviorSubject} from 'rxjs';
 
 @Component({
   selector: 'app-board',
@@ -7,17 +9,22 @@ import {TileComponent} from '../tile/tile.component';
   styleUrls: ['./board.component.css']
 })
 export class BoardComponent implements OnInit {
-  tiles = [
-    new TileComponent(1,1,'#142A5C'),
-    new TileComponent(1,1,'#B7A0E8'),
-    new TileComponent(1,1,'#FF0000'),
-    new TileComponent(1,1,'#D9EDD9'),
-    new TileComponent(1,1,'#142A5C'),
-    new TileComponent(1,1,'#B7A0E8'),
-    new TileComponent(1,1,'#FF0000'),
-    new TileComponent(1,1,'#D9EDD9'),
-    new TileComponent(1,1,'#D9EDD9'),
-  ];
+  colors : any[] = [];
+  tiles : TileComponent[] = [];
+  testEmitter$ = new BehaviorSubject<TileComponent[]>(this.tiles);
+
+  constructor( db : AngularFireDatabase) {
+    db.list('/colors').valueChanges().subscribe(colors => {
+      this.colors = colors
+      this.colors.forEach((color =>{
+        this.tiles.push(new TileComponent(1,1,color));
+      }));
+      
+      this.testEmitter$.next(this.tiles);
+    });
+    
+    this.testEmitter$.subscribe((value) => this.tiles = value);
+   }
   
   private getRandomColor() {
     let letters = '0123456789ABCDEF';
@@ -32,7 +39,6 @@ export class BoardComponent implements OnInit {
     tile.color = this.getRandomColor();
 
   }
-  constructor() { }
 
   ngOnInit(): void {
   }
