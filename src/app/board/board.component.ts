@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import {TileComponent} from '../tile/tile.component';
 
 @Component({
   selector: 'app-board',
@@ -7,15 +8,15 @@ import { Component, OnInit } from '@angular/core';
 })
 export class BoardComponent implements OnInit {
   tiles = [
-    {cols: 1, rows: 1, color: '#142A5C'},
-    {cols: 1, rows: 1, color: '#B7A0E8'},
-    {cols: 1, rows: 1, color: '#FF0000'},
-    {cols: 1, rows: 1, color: '#D9EDD9'},
-    {cols: 1, rows: 1, color: '#142A5C'},
-    {cols: 1, rows: 1, color: '#B7A0E8'},
-    {cols: 1, rows: 1, color: '#FF0000'},
-    {cols: 1, rows: 1, color: '#D9EDD9'},
-    {cols: 1, rows: 1, color: '#D9EDD9'},
+    new TileComponent(1,1,'#142A5C'),
+    new TileComponent(1,1,'#B7A0E8'),
+    new TileComponent(1,1,'#FF0000'),
+    new TileComponent(1,1,'#D9EDD9'),
+    new TileComponent(1,1,'#142A5C'),
+    new TileComponent(1,1,'#B7A0E8'),
+    new TileComponent(1,1,'#FF0000'),
+    new TileComponent(1,1,'#D9EDD9'),
+    new TileComponent(1,1,'#D9EDD9'),
   ];
   
   private getRandomColor() {
