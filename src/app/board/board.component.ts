@@ -9,18 +9,19 @@ import { DatabaseService } from 'src/app/database.service';
   templateUrl: './board.component.html',
   styleUrls: ['./board.component.css']
 })
+
 export class BoardComponent implements OnInit {
-  colors : any[] = [];
-  tiles : TileComponent[] = [];
+  colors: any[] = [];
+  tiles: TileComponent[] = [];
   databaseService: DatabaseService;
-  db : AngularFireDatabase;
+  db: AngularFireDatabase;
   testEmitter$ = new BehaviorSubject<TileComponent[]>(this.tiles);
 
-  constructor( db : AngularFireDatabase,  databaseService: DatabaseService) {
-    this.databaseService = databaseService
+  constructor( db: AngularFireDatabase, databaseService: DatabaseService) {
+    this.databaseService = databaseService;
     this.db = db;
     databaseService.getSnapshotChanges().subscribe(colors => {
-      this.colors = colors
+      this.colors = colors;
       this.tiles = [];
       this.colors.forEach((color => {
         this.tiles.push(new TileComponent(1, 1, color.payload.val(), color.payload.key));
@@ -43,7 +44,7 @@ export class BoardComponent implements OnInit {
 
   public changeColor(tile : any){
     tile.color = this.getRandomColor();
-    this.databaseService.updateColor(tile.id, tile.color)
+    this.databaseService.updateColor(tile.id, tile.color);
   }
 
   ngOnInit(): void {
