@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import {TileComponent} from '../tile/tile.component';
 import { AngularFireDatabase } from '@angular/fire/database';
 import {BehaviorSubject} from 'rxjs';
+import { DatabaseService } from 'src/app/database.service';
 
 @Component({
   selector: 'app-board',
@@ -11,12 +12,14 @@ import {BehaviorSubject} from 'rxjs';
 export class BoardComponent implements OnInit {
   colors : any[] = [];
   tiles : TileComponent[] = [];
+  databaseService: DatabaseService;
   db : AngularFireDatabase;
   testEmitter$ = new BehaviorSubject<TileComponent[]>(this.tiles);
 
-  constructor( db : AngularFireDatabase) {
+  constructor( db : AngularFireDatabase,  databaseService: DatabaseService) {
+    this.databaseService = databaseService
     this.db = db;
-    this.db.list('/colors').snapshotChanges().subscribe(colors => {
+    databaseService.getSnapshotChanges().subscribe(colors => {
       this.colors = colors
       this.tiles = [];
       this.colors.forEach((color => {
@@ -40,7 +43,7 @@ export class BoardComponent implements OnInit {
 
   public changeColor(tile : any){
     tile.color = this.getRandomColor();
-    this.db.database.ref(`/colors`).update({[tile.id] : tile.color})
+    this.databaseService.updateColor(tile.id, tile.color)
   }
 
   ngOnInit(): void {
