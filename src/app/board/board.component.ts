@@ -11,13 +11,16 @@ import {BehaviorSubject} from 'rxjs';
 export class BoardComponent implements OnInit {
   colors : any[] = [];
   tiles : TileComponent[] = [];
+  db : AngularFireDatabase;
   testEmitter$ = new BehaviorSubject<TileComponent[]>(this.tiles);
 
   constructor( db : AngularFireDatabase) {
-    db.list('/colors').valueChanges().subscribe(colors => {
+    this.db = db;
+    this.db.list('/colors').snapshotChanges().subscribe(colors => {
       this.colors = colors
-      this.colors.forEach((color =>{
-        this.tiles.push(new TileComponent(1,1,color));
+      this.tiles = [];
+      this.colors.forEach((color => {
+        this.tiles.push(new TileComponent(1, 1, color.payload.val(), color.payload.key));
       }));
       
       this.testEmitter$.next(this.tiles);
@@ -37,7 +40,7 @@ export class BoardComponent implements OnInit {
 
   public changeColor(tile : any){
     tile.color = this.getRandomColor();
-
+    this.db.database.ref(`/colors`).update({[tile.id] : tile.color})
   }
 
   ngOnInit(): void {
